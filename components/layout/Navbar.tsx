@@ -1,23 +1,23 @@
 'use client'
 
 import Link from 'next/link'
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef, useEffect, ReactNode } from 'react'
 import gsap from 'gsap'
 import { useMagnetic } from '@/hooks/useMagnetic'
 
-function MagneticBtn({ children }) {
-  const wrapRef = useMagnetic()
+function MagneticBtn({ children }: { children: ReactNode }) {
+  const wrapRef = useMagnetic() as React.RefObject<HTMLDivElement>
   return <div ref={wrapRef}>{children}</div>
 }
 
 export default function Navbar() {
   const [open, setOpen] = useState(false)
 
-  const panelRef = useRef(null)
-  const linksRef = useRef(null)
+  const panelRef = useRef<HTMLDivElement | null>(null)
+  const linksRef = useRef<HTMLDivElement | null>(null)
 
   useEffect(() => {
-    if (!panelRef.current) return
+    if (!panelRef.current || !linksRef.current) return
 
     if (open) {
       gsap.to(panelRef.current, {
@@ -65,12 +65,12 @@ export default function Navbar() {
 
         {/* START BUTTON */}
         <MagneticBtn>
-          <button className="btn-outline ">
+          <button className="btn-outline">
             Start a project →
           </button>
         </MagneticBtn>
 
-        {/* TOGGLE BUTTON (always fixed circle) */}
+        {/* TOGGLE BUTTON */}
         <MagneticBtn>
           <button
             onClick={() => setOpen(!open)}
@@ -81,12 +81,11 @@ export default function Navbar() {
           </button>
         </MagneticBtn>
 
-        {/* EXPANDING MENU PANEL */}
+        {/* MENU PANEL */}
         <div
           ref={panelRef}
           className="absolute right-0 top-0 mt-14 w-[220px] bg-[#0e0e0e] text-white rounded-2xl p-6 origin-top-right scale-0 opacity-0 overflow-hidden"
         >
-
           <div
             ref={linksRef}
             className="flex flex-col gap-3 opacity-0"
@@ -104,7 +103,6 @@ export default function Navbar() {
               Contact
             </Link>
           </div>
-
         </div>
 
       </div>

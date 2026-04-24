@@ -1,6 +1,6 @@
 'use client'
 
-import { FaServer, FaMobileAlt, FaSearch } from 'react-icons/fa'
+import { FaServer, FaMobileAlt, FaSearch, FaChartBar } from 'react-icons/fa'
 
 const strips = [
   {
@@ -22,10 +22,10 @@ const strips = [
     icon: FaSearch,
   },
   {
-    title: 'SEO & Growth Systems',
+    title: 'CRMs',
     desc: 'Technical SEO, performance optimization, and growth-focused engineering.',
     bg: '#d38506',
-    icon: FaSearch,
+    icon: FaChartBar,
   },
 ]
 
