@@ -1,0 +1,354 @@
+/* @import url('https://fonts.googleapis.com/css2?family=Elms+Sans:ital,wght@0,100..900;1,100..900&family=Gabarito:wght@400..900&display=swap');
+ */
+ @import url('https://fonts.googleapis.com/css2?family=Elms+Sans:ital,wght@0,100..900;1,100..900&family=Gabarito:wght@400..900&family=Stack+Sans+Headline:wght@200..700&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─── CSS VARIABLES ─── */
+:root {
+  --bg: #f0ede8;
+  --black: #0e0e0e;
+  --white: #ffffff;
+  --blue: #2b2bff;
+  --purple: #6d28d9;
+  --muted: #999;
+  --card-dark: #141414;
+  --ff-display: 'Syne', sans-serif;
+  --ff-body: 'DM Sans', sans-serif;
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ─── RESET & BASE ─── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: auto;
+}
+
+body {
+  background: var(--bg);
+  color: var(--black);
+  font-family: var(--ff-body);
+  overflow-x: hidden;
+  cursor: none;
+}
+
+/* ─── NOISE GRAIN OVERLAY ─── */
+body::after {
+  content: '';
+  position: fixed;
+  inset: -200%;
+  width: 400%;
+  height: 400%;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.55;
+  animation: grain 0.8s steps(2) infinite;
+}
+
+@keyframes grain {
+  0%, 100% { transform: translate(0, 0); }
+  10% { transform: translate(-2%, -3%); }
+  20% { transform: translate(3%, 2%); }
+  30% { transform: translate(-1%, 4%); }
+  40% { transform: translate(4%, -1%); }
+  50% { transform: translate(-3%, 3%); }
+  60% { transform: translate(2%, -4%); }
+  70% { transform: translate(-4%, 1%); }
+  80% { transform: translate(3%, 3%); }
+  90% { transform: translate(-2%, -2%); }
+}
+
+/* ─── CUSTOM CURSOR ─── */
+#cursor-dot,
+#cursor-ring {
+  position: fixed;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 10000;
+  transform: translate(-50%, -50%);
+  transition: opacity 0.3s;
+}
+
+#cursor-dot {
+  width: 8px;
+  height: 8px;
+  background: var(--black);
+}
+
+#cursor-ring {
+  width: 38px;
+  height: 38px;
+  border: 1.5px solid rgba(14, 14, 14, 0.4);
+  transition: width 0.3s var(--ease-out-expo), height 0.3s var(--ease-out-expo), border-color 0.3s;
+}
+
+body:has(a:hover) #cursor-ring,
+body:has(button:hover) #cursor-ring {
+  width: 60px;
+  height: 60px;
+  border-color: var(--blue);
+}
+
+/* ─── SCROLL PROGRESS BAR ─── */
+#progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 2px;
+  background: var(--blue);
+  z-index: 9997;
+  transform-origin: left;
+  transform: scaleX(0);
+  width: 100%;
+}
+
+/* ─── GSAP HIDDEN INITIAL STATE ─── */
+.gsap-hidden {
+  opacity: 0;
+  transform: translateY(40px);
+}
+
+/* ─── TICKER ANIMATION ─── */
+@keyframes tickerScroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.ticker-track {
+  animation: tickerScroll 22s linear infinite;
+}
+
+.ticker-track:hover {
+  animation-play-state: paused;
+}
+
+/* ─── BLOB ANIMATIONS ─── */
+@keyframes blobFloat {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(20px, -30px) scale(1.05); }
+  66% { transform: translate(-15px, 20px) scale(0.97); }
+}
+
+.blob-float-1 { animation: blobFloat 8s ease-in-out infinite; }
+.blob-float-2 { animation: blobFloat 10s ease-in-out infinite reverse; }
+.blob-float-3 { animation: blobFloat 7s ease-in-out infinite 2s; }
+
+/* ─── BUTTON SHARED STYLES ─── */
+.btn-outline {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.6rem 1.5rem;
+  border: 1.5px solid var(--black);
+  border-radius: 999px;
+  font-family: var(--ff-body);
+  font-size: 0.9rem;
+  font-weight: 500;
+  background: transparent;
+  cursor: none;
+  position: relative;
+  overflow: hidden;
+  transition: color 0.3s;
+}
+
+.btn-outline::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--black);
+  border-radius: 999px;
+  transform: scaleX(0) scaleY(0);
+  transform-origin: center;
+  transition: transform 0.4s var(--ease-out-expo);
+}
+
+.btn-outline:hover::before {
+  transform: scaleX(1) scaleY(1);
+}
+
+.btn-outline:hover {
+  color: var(--white);
+  
+}
+
+.btn-outline > span {
+  position: relative;
+  z-index: 1;
+}
+
+/* ─── PRIMARY BUTTON ─── */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  background: var(--purple);
+  color: var(--white);
+  border: none;
+  padding: 1.1rem 2.8rem;
+  border-radius: 999px;
+  font-family: var(--ff-body);
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: none;
+  text-decoration: none;
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+  transition: transform 0.3s var(--ease-out-expo), box-shadow 0.3s;
+}
+
+.btn-primary::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, #7c3aed, #2b2bff);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.btn-primary:hover {
+  transform: translateY(-3px) scale(1.03);
+  box-shadow: 0 12px 40px rgba(109, 40, 217, 0.5);
+}
+
+.btn-primary:hover::before {
+  opacity: 1;
+}
+
+.btn-primary > span {
+  position: relative;
+  z-index: 1;
+}
+
+/* ─── SERVICE CARD SHIMMER ─── */
+.service-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.service-card::after {
+  content: '';
+  position: absolute;
+  top: -100%;
+  left: -60%;
+  width: 40%;
+  height: 300%;
+  background: linear-gradient(105deg, transparent 0%, rgba(255, 255, 255, 0.06) 50%, transparent 100%);
+  transform: skewX(-15deg);
+  transition: left 0.7s var(--ease-out-expo);
+  pointer-events: none;
+}
+
+.service-card:hover::after {
+  left: 130%;
+}
+
+/* ─── MAGNETIC BUTTON WRAP ─── */
+.mag-wrap {
+  position: relative;
+  display: inline-block;
+}
+
+/* ─── TAG HOVER ─── */
+.tag {
+  padding: 0.3rem 1rem;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 500;
+  border: 1.5px solid currentColor;
+  opacity: 0.7;
+  transition: opacity 0.2s, background 0.2s, color 0.2s;
+  cursor: default;
+}
+
+.tag:hover {
+  opacity: 1;
+}
+
+.card-dark .tag:hover {
+  background: var(--white);
+  color: var(--black);
+}
+
+.card-blue .tag:hover {
+  background: var(--black);
+  color: var(--white);
+}
+
+/* ─── FOOTER LINK HOVER ─── */
+.f-nav a,
+.f-srv a {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  text-decoration: none;
+  font-size: 0.95rem;
+  color: var(--black);
+  margin-bottom: 0.5rem;
+  transition: color 0.2s, transform 0.2s;
+}
+
+.f-nav a:hover,
+.f-srv a:hover {
+  color: var(--blue);
+  transform: translateX(4px);
+}
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 900px) {
+  .bento-grid,
+  .stats-grid {
+    grid-template-columns: 1fr 1fr !important;
+  }
+  .bento-span2,
+  .bento-span3 {
+    grid-column: span 2 !important;
+  }
+  .test-layout {
+    grid-template-columns: 1fr !important;
+  }
+  .footer-top-grid {
+    grid-template-columns: 1fr !important;
+  }
+  .strip-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+@media (max-width: 600px) {
+  .bento-grid,
+  .stats-grid {
+    grid-template-columns: 1fr !important;
+  }
+  .bento-span2,
+  .bento-span3 {
+    grid-column: span 1 !important;
+  }
+  .card-grid-2col {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+
+
+/* Add at the bottom of styles/globals.css */
+.hero-headline .word {
+  display: inline-block;
+  /* fallback: visible if GSAP hasn't run */
+}
+
+/* Hide them only when JS is loaded (GSAP will reveal) */
+.js-loaded .hero-headline .word {
+  opacity: 0;
+  transform: translateY(120px) rotateX(-60deg) skewX(5deg);
+}
