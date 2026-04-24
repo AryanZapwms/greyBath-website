@@ -1,11 +1,22 @@
-/* @import url('https://fonts.googleapis.com/css2?family=Elms+Sans:ital,wght@0,100..900;1,100..900&family=Gabarito:wght@400..900&display=swap');
- */
- @import url('https://fonts.googleapis.com/css2?family=Elms+Sans:ital,wght@0,100..900;1,100..900&family=Gabarito:wght@400..900&family=Stack+Sans+Headline:wght@200..700&display=swap');
+/* ─────────────────────────────
+   GOOGLE FONTS
+───────────────────────────── */
+@import url("https://fonts.googleapis.com/css2?family=Elms+Sans:ital,wght@0,100..900;1,100..900&family=Gabarito:wght@400..900&family=Stack+Sans+Headline:wght@200..700&display=swap");
+
+@import "tw-animate-css";
+
+/* ❌ removed: @import "shadcn/tailwind.css"; (causes Tailwind conflicts) */
+
+/* ─────────────────────────────
+   TAILWIND
+───────────────────────────── */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* ─── CSS VARIABLES ─── */
+/* ─────────────────────────────
+   ROOT VARIABLES
+───────────────────────────── */
 :root {
   --bg: #f0ede8;
   --black: #0e0e0e;
@@ -14,12 +25,23 @@
   --purple: #6d28d9;
   --muted: #999;
   --card-dark: #141414;
-  --ff-display: 'Syne', sans-serif;
-  --ff-body: 'DM Sans', sans-serif;
+
+  --ff-display: "Syne", sans-serif;
+  --ff-body: "DM Sans", sans-serif;
+
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* minimal shadcn compatibility (fixes border-border error) */
+  --background: var(--bg);
+  --foreground: var(--black);
+  --border: rgba(0, 0, 0, 0.12);
+  --input: rgba(0, 0, 0, 0.12);
+  --ring: rgba(0, 0, 0, 0.25);
 }
 
-/* ─── RESET & BASE ─── */
+/* ─────────────────────────────
+   RESET
+───────────────────────────── */
 *,
 *::before,
 *::after {
@@ -41,9 +63,28 @@ body {
   cursor: none;
 }
 
-/* ─── NOISE GRAIN OVERLAY ─── */
+/* ─────────────────────────────
+   TAILWIND BASE FIX
+───────────────────────────── */
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+
+  html {
+    @apply font-sans;
+  }
+}
+
+/* ─────────────────────────────
+   NOISE OVERLAY
+───────────────────────────── */
 body::after {
-  content: '';
+  content: "";
   position: fixed;
   inset: -200%;
   width: 400%;
@@ -68,7 +109,9 @@ body::after {
   90% { transform: translate(-2%, -2%); }
 }
 
-/* ─── CUSTOM CURSOR ─── */
+/* ─────────────────────────────
+   CUSTOM CURSOR
+───────────────────────────── */
 #cursor-dot,
 #cursor-ring {
   position: fixed;
@@ -89,50 +132,11 @@ body::after {
   width: 38px;
   height: 38px;
   border: 1.5px solid rgba(14, 14, 14, 0.4);
-  transition: width 0.3s var(--ease-out-expo), height 0.3s var(--ease-out-expo), border-color 0.3s;
 }
 
-body:has(a:hover) #cursor-ring,
-body:has(button:hover) #cursor-ring {
-  width: 60px;
-  height: 60px;
-  border-color: var(--blue);
-}
-
-/* ─── SCROLL PROGRESS BAR ─── */
-#progress-bar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  height: 2px;
-  background: var(--blue);
-  z-index: 9997;
-  transform-origin: left;
-  transform: scaleX(0);
-  width: 100%;
-}
-
-/* ─── GSAP HIDDEN INITIAL STATE ─── */
-.gsap-hidden {
-  opacity: 0;
-  transform: translateY(40px);
-}
-
-/* ─── TICKER ANIMATION ─── */
-@keyframes tickerScroll {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
-}
-
-.ticker-track {
-  animation: tickerScroll 22s linear infinite;
-}
-
-.ticker-track:hover {
-  animation-play-state: paused;
-}
-
-/* ─── BLOB ANIMATIONS ─── */
+/* ─────────────────────────────
+   BLOBS
+───────────────────────────── */
 @keyframes blobFloat {
   0%, 100% { transform: translate(0, 0) scale(1); }
   33% { transform: translate(20px, -30px) scale(1.05); }
@@ -143,212 +147,99 @@ body:has(button:hover) #cursor-ring {
 .blob-float-2 { animation: blobFloat 10s ease-in-out infinite reverse; }
 .blob-float-3 { animation: blobFloat 7s ease-in-out infinite 2s; }
 
-/* ─── BUTTON SHARED STYLES ─── */
-.btn-outline {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  padding: 0.6rem 1.5rem;
-  border: 1.5px solid var(--black);
-  border-radius: 999px;
-  font-family: var(--ff-body);
-  font-size: 0.9rem;
-  font-weight: 500;
-  background: transparent;
-  cursor: none;
-  position: relative;
-  overflow: hidden;
-  transition: color 0.3s;
-}
-
-.btn-outline::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: var(--black);
-  border-radius: 999px;
-  transform: scaleX(0) scaleY(0);
-  transform-origin: center;
-  transition: transform 0.4s var(--ease-out-expo);
-}
-
-.btn-outline:hover::before {
-  transform: scaleX(1) scaleY(1);
-}
-
-.btn-outline:hover {
-  color: var(--white);
-  
-}
-
-.btn-outline > span {
-  position: relative;
-  z-index: 1;
-}
-
-/* ─── PRIMARY BUTTON ─── */
-.btn-primary {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.6rem;
-  background: var(--purple);
-  color: var(--white);
-  border: none;
-  padding: 1.1rem 2.8rem;
-  border-radius: 999px;
-  font-family: var(--ff-body);
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: none;
-  text-decoration: none;
-  position: relative;
-  z-index: 1;
-  overflow: hidden;
-  transition: transform 0.3s var(--ease-out-expo), box-shadow 0.3s;
-}
-
-.btn-primary::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg, #7c3aed, #2b2bff);
-  opacity: 0;
-  transition: opacity 0.3s;
-}
-
-.btn-primary:hover {
-  transform: translateY(-3px) scale(1.03);
-  box-shadow: 0 12px 40px rgba(109, 40, 217, 0.5);
-}
-
-.btn-primary:hover::before {
-  opacity: 1;
-}
-
-.btn-primary > span {
-  position: relative;
-  z-index: 1;
-}
-
-/* ─── SERVICE CARD SHIMMER ─── */
-.service-card {
-  position: relative;
-  overflow: hidden;
-}
-
-.service-card::after {
-  content: '';
-  position: absolute;
-  top: -100%;
-  left: -60%;
-  width: 40%;
-  height: 300%;
-  background: linear-gradient(105deg, transparent 0%, rgba(255, 255, 255, 0.06) 50%, transparent 100%);
-  transform: skewX(-15deg);
-  transition: left 0.7s var(--ease-out-expo);
-  pointer-events: none;
-}
-
-.service-card:hover::after {
-  left: 130%;
-}
-
-/* ─── MAGNETIC BUTTON WRAP ─── */
-.mag-wrap {
-  position: relative;
-  display: inline-block;
-}
-
-/* ─── TAG HOVER ─── */
-.tag {
-  padding: 0.3rem 1rem;
-  border-radius: 999px;
-  font-size: 0.78rem;
-  font-weight: 500;
-  border: 1.5px solid currentColor;
-  opacity: 0.7;
-  transition: opacity 0.2s, background 0.2s, color 0.2s;
-  cursor: default;
-}
-
-.tag:hover {
-  opacity: 1;
-}
-
-.card-dark .tag:hover {
-  background: var(--white);
-  color: var(--black);
-}
-
-.card-blue .tag:hover {
-  background: var(--black);
-  color: var(--white);
-}
-
-/* ─── FOOTER LINK HOVER ─── */
-.f-nav a,
-.f-srv a {
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-  text-decoration: none;
-  font-size: 0.95rem;
-  color: var(--black);
-  margin-bottom: 0.5rem;
-  transition: color 0.2s, transform 0.2s;
-}
-
-.f-nav a:hover,
-.f-srv a:hover {
-  color: var(--blue);
-  transform: translateX(4px);
-}
-
-/* ─── RESPONSIVE ─── */
-@media (max-width: 900px) {
-  .bento-grid,
-  .stats-grid {
-    grid-template-columns: 1fr 1fr !important;
-  }
-  .bento-span2,
-  .bento-span3 {
-    grid-column: span 2 !important;
-  }
-  .test-layout {
-    grid-template-columns: 1fr !important;
-  }
-  .footer-top-grid {
-    grid-template-columns: 1fr !important;
-  }
-  .strip-grid {
-    grid-template-columns: 1fr !important;
-  }
-}
-
-@media (max-width: 600px) {
-  .bento-grid,
-  .stats-grid {
-    grid-template-columns: 1fr !important;
-  }
-  .bento-span2,
-  .bento-span3 {
-    grid-column: span 1 !important;
-  }
-  .card-grid-2col {
-    grid-template-columns: 1fr !important;
-  }
-}
-
-
-
-/* Add at the bottom of styles/globals.css */
+/* ─────────────────────────────
+   HERO TEXT ANIMATION
+───────────────────────────── */
 .hero-headline .word {
   display: inline-block;
-  /* fallback: visible if GSAP hasn't run */
 }
 
-/* Hide them only when JS is loaded (GSAP will reveal) */
 .js-loaded .hero-headline .word {
   opacity: 0;
   transform: translateY(120px) rotateX(-60deg) skewX(5deg);
+}
+
+/* ---break---
+ */
+@layer base {
+  .theme {
+    --font-heading: var(--font-sans);
+    --font-sans: var(--font-sans);
+  }
+  :root {
+    --background: oklch(1 0 0);
+    --foreground: oklch(0.145 0 0);
+    --card: oklch(1 0 0);
+    --card-foreground: oklch(0.145 0 0);
+    --popover: oklch(1 0 0);
+    --popover-foreground: oklch(0.145 0 0);
+    --primary: oklch(0.205 0 0);
+    --primary-foreground: oklch(0.985 0 0);
+    --secondary: oklch(0.97 0 0);
+    --secondary-foreground: oklch(0.205 0 0);
+    --muted: oklch(0.97 0 0);
+    --muted-foreground: oklch(0.556 0 0);
+    --accent: oklch(0.97 0 0);
+    --accent-foreground: oklch(0.205 0 0);
+    --destructive: oklch(0.577 0.245 27.325);
+    --border: oklch(0.922 0 0);
+    --input: oklch(0.922 0 0);
+    --ring: oklch(0.708 0 0);
+    --chart-1: oklch(0.87 0 0);
+    --chart-2: oklch(0.556 0 0);
+    --chart-3: oklch(0.439 0 0);
+    --chart-4: oklch(0.371 0 0);
+    --chart-5: oklch(0.269 0 0);
+    --radius: 0.625rem;
+    --sidebar: oklch(0.985 0 0);
+    --sidebar-foreground: oklch(0.145 0 0);
+    --sidebar-primary: oklch(0.205 0 0);
+    --sidebar-primary-foreground: oklch(0.985 0 0);
+    --sidebar-accent: oklch(0.97 0 0);
+    --sidebar-accent-foreground: oklch(0.205 0 0);
+    --sidebar-border: oklch(0.922 0 0);
+    --sidebar-ring: oklch(0.708 0 0);
+  }
+  .dark {
+    --background: oklch(0.145 0 0);
+    --foreground: oklch(0.985 0 0);
+    --card: oklch(0.205 0 0);
+    --card-foreground: oklch(0.985 0 0);
+    --popover: oklch(0.205 0 0);
+    --popover-foreground: oklch(0.985 0 0);
+    --primary: oklch(0.922 0 0);
+    --primary-foreground: oklch(0.205 0 0);
+    --secondary: oklch(0.269 0 0);
+    --secondary-foreground: oklch(0.985 0 0);
+    --muted: oklch(0.269 0 0);
+    --muted-foreground: oklch(0.708 0 0);
+    --accent: oklch(0.269 0 0);
+    --accent-foreground: oklch(0.985 0 0);
+    --destructive: oklch(0.704 0.191 22.216);
+    --border: oklch(1 0 0 / 10%);
+    --input: oklch(1 0 0 / 15%);
+    --ring: oklch(0.556 0 0);
+    --chart-1: oklch(0.87 0 0);
+    --chart-2: oklch(0.556 0 0);
+    --chart-3: oklch(0.439 0 0);
+    --chart-4: oklch(0.371 0 0);
+    --chart-5: oklch(0.269 0 0);
+    --sidebar: oklch(0.205 0 0);
+    --sidebar-foreground: oklch(0.985 0 0);
+    --sidebar-primary: oklch(0.488 0.243 264.376);
+    --sidebar-primary-foreground: oklch(0.985 0 0);
+    --sidebar-accent: oklch(0.269 0 0);
+    --sidebar-accent-foreground: oklch(0.985 0 0);
+    --sidebar-border: oklch(1 0 0 / 10%);
+    --sidebar-ring: oklch(0.556 0 0);
+  }
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  html {
+    @apply font-sans;
+  }
 }

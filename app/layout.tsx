@@ -1,31 +1,32 @@
-import type { Metadata } from 'next'
-import { Syne, DM_Sans } from 'next/font/google'
-import '@/styles/globals.css'
+import type { Metadata } from "next"
+import { Syne, DM_Sans } from "next/font/google"
+import "@/styles/globals.css"
+import { cn } from "@/lib/utils"
 
 const syne = Syne({
-  subsets: ['latin'],
-  weight: ['400', '700', '800'],
-  variable: '--font-syne',
-  display: 'swap',
+  subsets: ["latin"],
+  weight: ["400", "700", "800"],
+  variable: "--font-syne",
+  display: "swap",
 })
 
 const dmSans = DM_Sans({
-  subsets: ['latin'],
-  weight: ['300', '400', '500'],
-  style: ['normal', 'italic'],
-  variable: '--font-dm-sans',
-  display: 'swap',
+  subsets: ["latin"],
+  weight: ["300", "400", "500"],
+  style: ["normal", "italic"],
+  variable: "--font-dm-sans",
+  display: "swap",
 })
 
 export const metadata: Metadata = {
-  title: 'GreyBath – Crafted with Care. Bold in execution. Built to last.',
+  title: "GreyBath – Crafted with Care. Bold in execution. Built to last.",
   description:
-    'A modern Mumbai-based tech studio delivering enterprise websites, custom portals, and SEO-led growth—engineered for accessibility, security, and scale.',
-  keywords: ['web design', 'development', 'UI/UX', 'branding', 'Mumbai', 'India'],
+    "A modern Mumbai-based tech studio delivering enterprise websites, custom portals, and SEO-led growth—engineered for accessibility, security, and scale.",
+  keywords: ["web design", "development", "UI/UX", "branding", "Mumbai", "India"],
   openGraph: {
-    title: 'GreyBath Technology',
-    description: 'Crafted with Care. Bold in execution. Built to last.',
-    type: 'website',
+    title: "GreyBath Technology",
+    description: "Crafted with Care. Bold in execution. Built to last.",
+    type: "website",
   },
 }
 
@@ -35,7 +36,14 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className={`${syne.variable} ${dmSans.variable}`}>
+    <html
+      lang="en"
+      className={cn(
+        syne.variable,
+        dmSans.variable,
+        "font-sans"
+      )}
+    >
       <body suppressHydrationWarning>{children}</body>
     </html>
   )

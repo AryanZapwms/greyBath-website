@@ -65,7 +65,7 @@ export default function Navbar() {
 
         {/* START BUTTON */}
         <MagneticBtn>
-          <button className="btn-outline">
+          <button className="btn-outline border rounded-2xl px-3 py-2 hover:bg-black hover:text-white">
             Start a project →
           </button>
         </MagneticBtn>
@@ -92,6 +92,9 @@ export default function Navbar() {
           >
             <Link href="/" className="text-sm hover:opacity-70">
               Home
+            </Link>
+             <Link href="/services" className="text-sm hover:opacity-70">
+              Services
             </Link>
             <Link href="/work" className="text-sm hover:opacity-70">
               Work
